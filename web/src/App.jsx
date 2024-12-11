@@ -2,12 +2,15 @@ import "./App.css";
 import Layout from "./Layout";
 import React from "react";
 import ProductsPage from "./ProductsPage";
+import { CartProvider } from "./providers/CartProvider";
 
 function App() {
 	return (
-		<Layout>
-			<ProductsPage />
-		</Layout>
+		<CartProvider>
+			<Layout>
+				<ProductsPage />
+			</Layout>
+		</CartProvider>
 	);
 }
 
