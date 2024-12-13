@@ -21,7 +21,7 @@ const ProductCard = ({ product, addToCart, loading = false }) => {
 	return (
 		<div className="card">
 			<div className="card-image">
-				<figure className="image is-4by3">
+				<figure className="image is-square">
 					<img src={product.image || "https://via.placeholder.com/300"} alt={product.title} />
 				</figure>
 			</div>
