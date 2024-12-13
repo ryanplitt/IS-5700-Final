@@ -1,0 +1,42 @@
+// Import Bulma's variables to customize
+// @use "bulma/sass/utilities/initial-variables" as *;
+
+// // Pastel Theme
+// $primary: #a29bfe;  // Lavender
+// $link: #81ecec;     // Light teal
+// $success: #55efc4;  // Pastel green
+// $info: #74b9ff;     // Light blue
+// $warning: #ffeaa7;  // Pale yellow
+// $danger: #fab1a0;   // Light coral
+
+// Define your pastel palette
+$lavender: #a29bfe;
+$teal-light: #81ecec;
+$green-pastel: #55efc4;
+$blue-light: #74b9ff;
+$yellow-pale: #ffeaa7;
+$coral: #fab1a0;
+$grey-dark: #3a3a3a;
+$grey-light: #f7f9fa;
+
+// Import Bulma with custom variables
+@use "bulma/sass" with (
+  $primary: $lavender,
+  $link: $teal-light,
+  $success: $green-pastel,
+  $info: $blue-light,
+  $warning: $yellow-pale,
+  $danger: $coral,
+  $grey-dark: $grey-dark,
+  $grey-light: $grey-light,
+  $family-primary: '"Nunito", sans-serif'
+);
+
+// Import Google Font
+@import url("https://fonts.googleapis.com/css?family=Nunito:400,700");
+
+// Custom styles (optional)
+body {
+  background-color: $grey-light;
+  color: $grey-dark;
+}

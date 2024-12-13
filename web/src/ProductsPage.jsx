@@ -1,30 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { useAPI } from "./hooks/useAPI"; // Adjust the path
-import ProductCard from "./ProductCard";
+import React from "react";
+import "./styles/main.scss";
 
-const ProductsPage = ({ addToCart }) => {
-	const [products, setProducts] = useState([]);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState(null);
-	const { fetchPublishedProducts } = useAPI();
-
-	useEffect(() => {
-		const fetchProducts = async () => {
-			try {
-				const products = await fetchPublishedProducts();
-				setProducts(products);
-			} catch (err) {
-				setError("Failed to load products");
-			} finally {
-				setLoading(false);
-			}
-		};
-
-		fetchProducts();
-	}, [fetchPublishedProducts]);
-
+const ProductsPage = ({ groupedProducts, loading, error }) => {
 	if (loading) {
-		return <p>Loading products...</p>;
+		return (
+			<div
+				className="is-flex is-justify-content-center is-align-items-center"
+				style={{ height: "100vh" }}
+			>
+				<div className="loader is-large"></div>
+			</div>
+		);
 	}
 
 	if (error) {
@@ -32,17 +18,37 @@ const ProductsPage = ({ addToCart }) => {
 	}
 
 	return (
-		<section className="section">
-			<div className="container">
-				<div className="grid is-col-min-8">
-					{products.map((product) => (
-						<div className="cell" key={product.id}>
-							<ProductCard product={product} addToCart={addToCart} />
-						</div>
-					))}
-				</div>
-			</div>
-		</section>
+		<>
+			{/* Render sections for each product type */}
+			{Object.entries(groupedProducts).map(([type, products]) => (
+				<section key={type} className="section">
+					<h1 className="title">{type.capitalized()}</h1>
+					<div className="columns is-multiline">
+						{products.map((product) => (
+							<div key={product.id} className="column is-one-quarter">
+								<div className="card">
+									<div className="card-image">
+										<figure className="image is-square">
+											<img
+												src={
+													product.image || "https://bulma.io/assets/images/placeholders/256x256.png"
+												}
+												alt={product.title}
+											/>
+										</figure>
+									</div>
+									<div className="card-content">
+										<p className="title is-5">{product.title}</p>
+										<p className="subtitle is-6">${product.price.toFixed(2)}</p>
+										<p>{product.description}</p>
+									</div>
+								</div>
+							</div>
+						))}
+					</div>
+				</section>
+			))}
+		</>
 	);
 };
 

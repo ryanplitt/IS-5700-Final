@@ -11,9 +11,12 @@ const api = axios.create({
 });
 
 export const useAPI = () => {
-	const fetchPublishedProducts = useCallback(async () => {
+	const fetchPublishedProducts = useCallback(async (query = "") => {
 		try {
-			const response = await api.get("/products/published");
+			// Pass the query as a parameter to the API
+			const response = await api.get("/products/published", {
+				params: { search: query },
+			});
 			return response.data.products;
 		} catch (error) {
 			console.error("Error fetching published products:", error);

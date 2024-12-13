@@ -1,25 +1,40 @@
-import React, { useState, useEffect, useRef } from "react";
-import { useCart } from "./hooks/useCart";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import DebouncedSearch from "./components/DebouncedSearch";
+import ProductsPage from "./ProductsPage";
 
-const Layout = ({ children }) => {
-	const { cart } = useCart(); // Using useCart hook to access cart data
-	const [isCartOpen, setIsCartOpen] = useState(false);
-	const dropdownRef = useRef();
+const Layout = () => {
+	const [groupedProducts, setGroupedProducts] = useState({}); // Grouped products by type
+	const [loading, setLoading] = useState(false); // Loading state
+	const [error, setError] = useState(null); // Error state
 
-	// Close dropdown when clicking outside
+	// Handle search and grouping functionality
+	const handleSearch = async (query) => {
+		setLoading(true);
+		setError(null);
+
+		try {
+			// API request with optional search query and groupBy
+			const response = await axios.get("http://localhost:3000/products/published", {
+				params: {
+					search: query,
+					groupBy: "product_type",
+				},
+			});
+
+			setGroupedProducts(response.data.products); // Set grouped products
+		} catch (err) {
+			console.error("Error fetching products:", err);
+			setError("Failed to fetch products. Please try again.");
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	// Fetch all products grouped by type on initial load
 	useEffect(() => {
-		const handleClickOutside = (event) => {
-			if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-				setIsCartOpen(false);
-			}
-		};
-		document.addEventListener("mousedown", handleClickOutside);
-		return () => {
-			document.removeEventListener("mousedown", handleClickOutside);
-		};
+		handleSearch("");
 	}, []);
-
-	const toggleCart = () => setIsCartOpen(!isCartOpen);
 
 	return (
 		<div>
@@ -34,66 +49,20 @@ const Layout = ({ children }) => {
 							Login
 						</a>
 					</div>
-					<div className="navbar-end" ref={dropdownRef}>
-						{/* Cart Dropdown directly in Navbar */}
-						<div
-							className={`dropdown is-right ${isCartOpen ? "is-active" : ""}`}
-							style={{ position: "relative" }}
-						>
-							{/* Dropdown Trigger */}
-							<button
-								className="button"
-								aria-haspopup="true"
-								aria-controls="dropdown-menu"
-								onClick={toggleCart}
-							>
-								<span>Cart ({cart.length})</span>
-								<span className="icon is-small">
-									<i className="fas fa-angle-down" aria-hidden="true"></i>
-								</span>
-							</button>
-
-							{/* Dropdown Content */}
-							<div
-								className="dropdown-menu"
-								id="dropdown-menu"
-								role="menu"
-								style={{
-									position: "absolute",
-									right: 0,
-									top: "100%", // Adjust to align under the button
-								}}
-							>
-								<div className="dropdown-content">
-									{/* Cart Content */}
-									{cart.length === 0 ? (
-										<div className="dropdown-item">Your cart is empty.</div>
-									) : (
-										cart.map((item) => (
-											<div key={item.id} className="dropdown-item">
-												<p>
-													<strong>{item.name}</strong>
-												</p>
-												<p>${item.price.toFixed(2)}</p>
-												<p>Qty: {item.quantity}</p>
-											</div>
-										))
-									)}
-									<hr className="dropdown-divider" />
-									<div className="dropdown-item">
-										<button className="button is-primary is-fullwidth">Checkout</button>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
 				</div>
 			</nav>
 
-			{/* Main Content */}
-			<div className="columns">
-				{/* Products Section */}
-				<div className="column products-view">{children}</div>
+			{/* Search Section */}
+			<div className="section">
+				<div className="container">
+					{/* Search Bar */}
+					<DebouncedSearch onSearch={handleSearch} placeholder="Search products..." />
+				</div>
+			</div>
+
+			{/* Products Page */}
+			<div className="container">
+				<ProductsPage groupedProducts={groupedProducts} loading={loading} error={error} />
 			</div>
 		</div>
 	);
