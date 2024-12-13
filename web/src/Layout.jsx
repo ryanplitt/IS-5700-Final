@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import DebouncedSearch from "./components/DebouncedSearch";
 import ProductsPage from "./ProductsPage";
+import { Link } from "react-router-dom";
 
 const Layout = () => {
 	const [groupedProducts, setGroupedProducts] = useState({}); // Grouped products by type
@@ -42,12 +43,14 @@ const Layout = () => {
 			<nav className="navbar is-primary" role="navigation" aria-label="main navigation">
 				<div className="navbar-menu">
 					<div className="navbar-start">
-						<a className="navbar-item" href="#">
-							Products
-						</a>
-						<a className="navbar-item" href="#">
+						<Link to="/" className="navbar-item">
+							Home
+						</Link>
+					</div>
+					<div className="navbar-end">
+						<Link to="/login" className="navbar-item">
 							Login
-						</a>
+						</Link>
 					</div>
 				</div>
 			</nav>
