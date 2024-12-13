@@ -1,6 +1,7 @@
 import React from "react";
-import "./styles/main.scss";
 import ProductCard from "./ProductCard";
+import "./utils/stringExtensions";
+import "./styles/main.scss";
 
 const ProductsPage = ({ groupedProducts, loading, error }) => {
 	if (loading) {
@@ -20,13 +21,12 @@ const ProductsPage = ({ groupedProducts, loading, error }) => {
 
 	return (
 		<>
-			{/* Render sections for each product type */}
 			{Object.entries(groupedProducts).map(([type, products]) => (
 				<section key={type} className="section">
-					<div className="title">{type.capitalized()}</div>
-					<div className="grid">
+					<h1 className="title">{type.capitalized()}</h1>
+					<div className="columns is-multiline">
 						{products.map((product) => (
-							<ProductCard product={product} />
+							<ProductCard key={product.id} product={product} />
 						))}
 					</div>
 				</section>
