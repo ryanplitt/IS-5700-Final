@@ -8,11 +8,7 @@ const app = express();
 app.use(bodyParser.json());
 
 // CORS
-app.use(
-	cors({
-		origin: ["http://localhost:5173", "https://is-5700-final-web.vercel.app"],
-	})
-);
+app.use(cors());
 
 app.use((req, res, next) => {
 	res.setHeader("Content-Type", "application/json");
