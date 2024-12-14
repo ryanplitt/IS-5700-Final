@@ -23,8 +23,8 @@ const ProductsPage = ({ groupedProducts, loading, error }) => {
 		<>
 			{Object.entries(groupedProducts).map(([type, products]) => (
 				<section key={type} className="section">
-					<h1 className="title">{type.capitalized()}</h1>
-					<div className="columns is-multiline">
+					<div className="title">{type.capitalized()}</div>
+					<div className="grid">
 						{products.map((product) => (
 							<ProductCard key={product.id} product={product} />
 						))}

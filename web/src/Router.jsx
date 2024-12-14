@@ -1,13 +1,20 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate, Outlet } from "react-router-dom";
 import ProductsPage from "./ProductsPage";
 import Login from "./Login";
-import { CartProvider } from "./providers/CartProvider";
+import { CartProvider } from "./context/CartProvider";
 import DebouncedSearch from "./components/DebouncedSearch";
 import useProductSearch from "./hooks/useProductSearch";
+import AdminPanel from "./components/AdminPanel";
+import { useAuth } from "./context/AuthContext";
+import EditProductPage from "./components/EditProductPage";
+
+const ProtectedRoute = ({ children }) => {
+	const { isAuthenticated } = useAuth();
+	return isAuthenticated ? children : <Navigate to="/login" />;
+};
 
 const Router = () => {
-	// Use the custom search hook
 	const { groupedProducts, loading, error, searchProducts } = useProductSearch("");
 
 	return (
@@ -31,6 +38,15 @@ const Router = () => {
 				}
 			/>
 			<Route path="/login" element={<Login />} />
+			<Route
+				path="/admin"
+				element={
+					<ProtectedRoute>
+						<AdminPanel />
+					</ProtectedRoute>
+				}
+			/>
+			<Route path="edit-product/:productId" element={<EditProductPage />} />
 		</Routes>
 	);
 };

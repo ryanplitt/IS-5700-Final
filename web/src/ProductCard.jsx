@@ -1,6 +1,11 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "./context/AuthContext";
 
 const ProductCard = ({ product, addToCart, loading = false }) => {
+	const navigate = useNavigate();
+	const { isAuthenticated } = useAuth();
+
 	if (loading) {
 		return (
 			<div className="card">
@@ -27,10 +32,23 @@ const ProductCard = ({ product, addToCart, loading = false }) => {
 			</div>
 			<div className="card-content">
 				<p className="title is-4">{product.title}</p>
-				<p className="subtitle is-6">${product.price.toFixed(2)}</p>
-				<button className="button is-primary is-fullwidth" onClick={() => addToCart(product)}>
-					Add to Cart
-				</button>
+				<div className="subtitle is-6">
+					<div className="subtitle is-6">
+						${product.price ? parseFloat(product.price).toFixed(2) : "0.00"}
+					</div>
+				</div>
+				{isAuthenticated ? (
+					<button
+						className="button is-warning is-fullwidth"
+						onClick={() => navigate(`/edit-product/${product.id}`, { state: { product } })}
+					>
+						Edit Product
+					</button>
+				) : (
+					<button className="button is-primary is-fullwidth" onClick={() => addToCart(product)}>
+						Add to Cart
+					</button>
+				)}
 			</div>
 		</div>
 	);
