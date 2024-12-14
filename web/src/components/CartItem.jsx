@@ -9,19 +9,16 @@ const CartItem = ({ item }) => {
 	return (
 		<div className="box">
 			<div className="media">
-				{/* Image */}
 				<div className="media-left">
 					<figure className="image is-64x64">
 						<img src={item.image || "https://via.placeholder.com/64"} alt={item.name} />
 					</figure>
 				</div>
 
-				{/* Item Details */}
 				<div className="media-content">
 					<p className="title is-6">{item.title}</p>
 					<p className="subtitle is-7">${price} each</p>
 
-					{/* Quantity Stepper */}
 					<div className="field has-addons">
 						<p className="control">
 							<button
@@ -51,7 +48,6 @@ const CartItem = ({ item }) => {
 						</p>
 					</div>
 
-					{/* Total and Remove Button */}
 					<div className="mt-3">
 						<p className="subtitle is-7">Total: ${calculateItemTotal(item).toFixed(2)}</p>
 						<button className="button is-danger is-small" onClick={() => removeFromCart(item.id)}>

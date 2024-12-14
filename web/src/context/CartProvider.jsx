@@ -1,13 +1,29 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "./AuthContext";
+import Modal from "../components/Modal";
+
 export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
 	const [cart, setCart] = useState([]);
 	const [error, setError] = useState(null);
-	const [totalWithDiscount, setTotalWithDiscount] = useState(0); // Store discounted total
-	const { admin } = useAuth(); // Use admin data for discount settings
+	const [totalWithDiscount, setTotalWithDiscount] = useState(0);
+	const { admin } = useAuth();
+
+	const [modal, setModal] = useState({
+		isActive: false,
+		title: "",
+		content: "",
+	});
+
+	const showModal = (title, content) => {
+		setModal({ isActive: true, title, content });
+	};
+
+	const closeModal = () => {
+		setModal({ isActive: false, title: "", content: "" });
+	};
 
 	// Add item to cart
 	const addToCart = (product) => {
@@ -74,7 +90,6 @@ export const CartProvider = ({ children }) => {
 		setTotalWithDiscount(cartTotal - discount);
 	}, [cart, admin]);
 
-	// Checkout function
 	const checkout = async () => {
 		try {
 			// Update inventory in the backend
@@ -90,7 +105,10 @@ export const CartProvider = ({ children }) => {
 			);
 			// Clear the cart after successful checkout
 			setCart([]);
-			alert("Purchase successful! Thank you for your order.");
+			showModal(
+				"Purchase Successful",
+				"Thank you for your order! Your purchase has been successfully processed."
+			);
 		} catch (err) {
 			console.error(err);
 			setError("Checkout failed. Please try again.");
@@ -114,6 +132,12 @@ export const CartProvider = ({ children }) => {
 			}}
 		>
 			{children}
+			<Modal
+				isActive={modal.isActive}
+				title={modal.title}
+				content={modal.content}
+				onClose={closeModal}
+			/>
 		</CartContext.Provider>
 	);
 };

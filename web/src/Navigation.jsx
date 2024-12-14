@@ -9,8 +9,8 @@ const Navigation = ({ children }) => {
 	const isAuthenticated = auth ? auth.isAuthenticated : false;
 
 	const handleLogout = () => {
-		auth.logout();
 		navigate("/");
+		auth.logout();
 	};
 
 	return (

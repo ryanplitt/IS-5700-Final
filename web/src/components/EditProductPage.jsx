@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useAdmin } from "../hooks/useAdmin";
+import Modal from "./Modal";
 
 const EditProductPage = () => {
 	const { updateProduct } = useAdmin();
@@ -19,6 +20,20 @@ const EditProductPage = () => {
 		}
 	);
 
+	const [modal, setModal] = useState({
+		isActive: false,
+		title: "",
+		content: "",
+	});
+
+	const showModal = (title, content) => {
+		setModal({ isActive: true, title, content });
+	};
+
+	const closeModal = () => {
+		setModal({ isActive: false, title: "", content: "" });
+	};
+
 	const handleChange = (e) => {
 		const { name, value } = e.target;
 		setProduct((prevProduct) => ({
@@ -31,11 +46,11 @@ const EditProductPage = () => {
 		e.preventDefault();
 		try {
 			await updateProduct(productId, product);
-			alert("Product updated successfully!");
-			navigate("/");
+			showModal("Success", "Product updated successfully!");
+			setTimeout(() => navigate("/"), 1500);
 		} catch (err) {
 			console.error(err);
-			alert("Failed to update product.");
+			showModal("Error", "Failed to update product.");
 		}
 	};
 
@@ -127,6 +142,12 @@ const EditProductPage = () => {
 					</div>
 				</div>
 			</form>
+			<Modal
+				isActive={modal.isActive}
+				title={modal.title}
+				content={modal.content}
+				onClose={closeModal}
+			/>
 		</div>
 	);
 };

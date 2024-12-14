@@ -8,7 +8,8 @@ const useProductSearch = (initialQuery = "") => {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(null);
 
-	// Fetch products based on a search query
+	const flattenGroupedProducts = (grouped) => Object.values(grouped).flat();
+
 	const searchProducts = async (query) => {
 		setLoading(true);
 		setError(null);
@@ -24,7 +25,22 @@ const useProductSearch = (initialQuery = "") => {
 					groupBy: "product_type",
 				},
 			});
-			setGroupedProducts(response.data.products);
+			const grouped = response.data.products;
+
+			// Flatten and filter products
+			const allProducts = flattenGroupedProducts(grouped);
+			const filteredProducts = isAuthenticated
+				? allProducts
+				: allProducts.filter((product) => product.inventory > 0);
+
+			// Regroup the filtered products by type
+			const regroupedProducts = filteredProducts.reduce((acc, product) => {
+				if (!acc[product.product_type]) acc[product.product_type] = [];
+				acc[product.product_type].push(product);
+				return acc;
+			}, {});
+
+			setGroupedProducts(regroupedProducts);
 		} catch (err) {
 			console.error("Error fetching products:", err);
 			setError("Failed to fetch products. Please try again.");

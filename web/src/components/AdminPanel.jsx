@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useAdmin } from "../hooks/useAdmin";
+import Modal from "./Modal";
 
 const AdminPanel = () => {
 	const { getAdminSettings, updateAdminSettings } = useAdmin();
@@ -12,6 +13,20 @@ const AdminPanel = () => {
 	const [formValues, setFormValues] = useState({ ...adminSettings }); // Separate state for form inputs
 	const [fetchLoading, setFetchLoading] = useState(false);
 	const [updateLoading, setUpdateLoading] = useState(false);
+
+	const [modal, setModal] = useState({
+		isActive: false,
+		title: "",
+		content: "",
+	});
+
+	const showModal = (title, content) => {
+		setModal({ isActive: true, title, content });
+	};
+
+	const closeModal = () => {
+		setModal({ isActive: false, title: "", content: "" });
+	};
 
 	useEffect(() => {
 		const fetchAdminSettings = async () => {
@@ -43,11 +58,11 @@ const AdminPanel = () => {
 		setUpdateLoading(true);
 		try {
 			await updateAdminSettings(formValues);
-			setAdminSettings(formValues); // Update actual settings only on successful submission
-			alert("Admin settings updated successfully!");
+			setAdminSettings(formValues);
+			showModal("Success", "Admin settings updated successfully!");
 		} catch (err) {
 			console.error(err);
-			alert("Failed to update admin settings.");
+			showModal("Error", "Failed to update admin settings.");
 		} finally {
 			setUpdateLoading(false);
 		}
@@ -121,6 +136,12 @@ const AdminPanel = () => {
 					</div>
 				</div>
 			</form>
+			<Modal
+				isActive={modal.isActive}
+				title={modal.title}
+				content={modal.content}
+				onClose={closeModal}
+			/>
 		</div>
 	);
 };

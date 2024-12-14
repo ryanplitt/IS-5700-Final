@@ -11,17 +11,14 @@ const ProductsPage = ({ groupedProducts, loading, error }) => {
 
 	const [selectedTypes, setSelectedTypes] = useState([]);
 
-	// Extract unique product types
 	const productTypes = useMemo(() => Object.keys(groupedProducts), [groupedProducts]);
 
-	// Toggle product type selection
 	const toggleType = (type) => {
 		setSelectedTypes((prev) =>
 			prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]
 		);
 	};
 
-	// Filtered groupedProducts
 	const filteredProducts = useMemo(() => {
 		if (selectedTypes.length === 0) return groupedProducts;
 		return Object.entries(groupedProducts).reduce((acc, [type, products]) => {

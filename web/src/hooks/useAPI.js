@@ -13,7 +13,6 @@ const api = axios.create({
 export const useAPI = () => {
 	const fetchPublishedProducts = useCallback(async (query = "") => {
 		try {
-			// Pass the query as a parameter to the API
 			const response = await api.get("/products/published", {
 				params: { search: query },
 			});

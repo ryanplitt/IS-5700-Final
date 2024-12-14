@@ -12,15 +12,10 @@ const api = axios.create({
 });
 
 export const AuthContextProvider = ({ children }) => {
-	const [isAuthenticated, setIsAuthenticated] = useState(true);
+	const [isAuthenticated, setIsAuthenticated] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(null);
-	const [admin, setAdmin] = useState({
-		username: "admin@example.com",
-		password: "hashed_password",
-		discount_threshold: 300,
-		discount_rate: 0.2,
-	});
+	const [admin, setAdmin] = useState(null);
 
 	const login = async (email, password) => {
 		setLoading(true);

@@ -10,11 +10,11 @@ const DebouncedSearch = ({ onSearch, delay = 500, placeholder = "Search..." }) =
 			}
 		}, delay);
 
-		return () => clearTimeout(handler); // Cleanup on unmount or inputValue change
+		return () => clearTimeout(handler);
 	}, [inputValue]);
 
 	const handleChange = (e) => {
-		setInputValue(e.target.value); // Update local state
+		setInputValue(e.target.value);
 	};
 
 	return (
