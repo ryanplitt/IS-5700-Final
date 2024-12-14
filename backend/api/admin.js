@@ -1,7 +1,8 @@
 import { promises as fs } from "fs";
 import path from "path";
+import applyMiddleware from "../middleware";
 
-export default async (req, res) => {
+const handler = async (req, res) => {
 	try {
 		if (req.method === "GET") {
 			// Use absolute path for the admin.json file
@@ -20,3 +21,5 @@ export default async (req, res) => {
 		return res.status(500).json({ message: "Internal Server Error" });
 	}
 };
+
+export default applyMiddleware(handler);

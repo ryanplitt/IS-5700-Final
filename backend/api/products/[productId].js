@@ -1,7 +1,8 @@
 import { promises as fs } from "fs";
 import path from "path";
+import applyMiddleware from "../../middleware";
 
-export default async (req, res) => {
+const handler = async (req, res) => {
 	const { productId } = req.query;
 
 	if (req.method === "PUT") {
@@ -38,3 +39,5 @@ export default async (req, res) => {
 	res.setHeader("Allow", ["PUT"]);
 	return res.status(405).json({ message: "Method Not Allowed" });
 };
+
+export default applyMiddleware(handler);

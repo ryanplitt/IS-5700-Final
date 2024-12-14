@@ -1,7 +1,8 @@
 import { promises as fs } from "fs";
 import path from "path";
+import applyMiddleware from "../../middleware";
 
-export default async (req, res) => {
+const handler = async (req, res) => {
 	if (req.method !== "GET") {
 		res.setHeader("Allow", ["GET"]);
 		return res.status(405).json({ message: "Method Not Allowed" });
@@ -46,3 +47,5 @@ export default async (req, res) => {
 		return res.status(500).json({ message: "Internal Server Error" });
 	}
 };
+
+export default applyMiddleware(handler);
