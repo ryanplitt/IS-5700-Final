@@ -39,6 +39,38 @@ export const useAdmin = () => {
 		}
 	};
 
+	const publishProduct = async (product) => {
+		setLoading(true);
+		setError(null);
+		try {
+			const response = await api.put(`/products/${product.id}`, {
+				product: { ...product, published: true },
+			});
+			return response.data;
+		} catch (err) {
+			setError(err.message);
+			throw err;
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	const unpublishProduct = async (product) => {
+		setLoading(true);
+		setError(null);
+		try {
+			const response = await api.put(`/products/${product.id}`, {
+				product: { ...product, published: false },
+			});
+			return response.data;
+		} catch (err) {
+			setError(err.message);
+			throw err;
+		} finally {
+			setLoading(false);
+		}
+	};
+
 	const getAdminSettings = async () => {
 		setLoading(true);
 		setError(null);
@@ -74,5 +106,7 @@ export const useAdmin = () => {
 		updateProduct,
 		getAdminSettings,
 		updateAdminSettings,
+		publishProduct,
+		unpublishProduct,
 	};
 };

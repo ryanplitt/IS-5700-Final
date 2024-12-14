@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useAuth } from "../context/AuthContext";
 
 const useProductSearch = (initialQuery = "") => {
+	const { isAuthenticated } = useAuth();
 	const [groupedProducts, setGroupedProducts] = useState({});
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(null);
@@ -11,8 +13,12 @@ const useProductSearch = (initialQuery = "") => {
 		setLoading(true);
 		setError(null);
 
+		const url = isAuthenticated
+			? "http://localhost:3000/products/all"
+			: "http://localhost:3000/products/published";
+
 		try {
-			const response = await axios.get("http://localhost:3000/products/published", {
+			const response = await axios.get(url, {
 				params: {
 					search: query,
 					groupBy: "product_type",
@@ -30,7 +36,7 @@ const useProductSearch = (initialQuery = "") => {
 	// Fetch products on initial load
 	useEffect(() => {
 		searchProducts(initialQuery);
-	}, [initialQuery]);
+	}, [initialQuery, isAuthenticated]);
 
 	return { groupedProducts, loading, error, searchProducts };
 };

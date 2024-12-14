@@ -1,29 +1,22 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
-import { useCart } from "./hooks/useCart";
+import { useAdmin } from "./hooks/useAdmin";
 
-const ProductCard = ({ product, loading = false }) => {
-	const navigate = useNavigate();
+const ProductCard = ({ product }) => {
 	const { isAuthenticated } = useAuth();
-	const { cart, addToCart } = useCart();
+	const { publishProduct, unpublishProduct } = useAdmin();
+	const navigate = useNavigate();
 
-	if (loading) {
-		return (
-			<div className="card">
-				<div className="card-image">
-					<figure className="image skeleton is-square"></figure>
-				</div>
-				<div className="card-content">
-					<p className="skeleton skeleton-text is-title"></p>
-					<p className="skeleton skeleton-text is-subtitle"></p>
-					<button className="button is-primary is-disabled skeleton is-fullwidth">
-						Add to Cart
-					</button>
-				</div>
-			</div>
-		);
-	}
+	const handleTogglePublish = async () => {
+		if (product.published) {
+			await unpublishProduct(product);
+			product.published = false;
+		} else {
+			await publishProduct(product);
+			product.published = true;
+		}
+	};
 
 	return (
 		<div className="card">
@@ -38,12 +31,20 @@ const ProductCard = ({ product, loading = false }) => {
 					${product.price ? parseFloat(product.price).toFixed(2) : "0.00"}
 				</p>
 				{isAuthenticated ? (
-					<button
-						className="button is-warning is-fullwidth"
-						onClick={() => navigate(`/edit-product/${product.id}`, { state: { product } })}
-					>
-						Edit Product
-					</button>
+					<>
+						<button
+							className="button is-warning is-fullwidth mb-2"
+							onClick={() => navigate(`/edit-product/${product.id}`, { state: { product } })}
+						>
+							Edit Product
+						</button>
+						<button
+							className={`button is-fullwidth ${product.published ? "is-danger" : "is-success"}`}
+							onClick={handleTogglePublish}
+						>
+							{product.published ? "Unpublish" : "Publish"}
+						</button>
+					</>
 				) : (
 					<button className="button is-primary is-fullwidth" onClick={() => addToCart(product)}>
 						Add to Cart
