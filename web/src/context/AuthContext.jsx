@@ -12,7 +12,7 @@ const api = axios.create({
 });
 
 export const AuthContextProvider = ({ children }) => {
-	const [isAuthenticated, setIsAuthenticated] = useState(false);
+	const [isAuthenticated, setIsAuthenticated] = useState(true);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(null);
 	const [admin, setAdmin] = useState({

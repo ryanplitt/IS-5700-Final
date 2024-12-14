@@ -2,10 +2,12 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
 import { useAdmin } from "./hooks/useAdmin";
+import { useCart } from "./context/CartProvider";
 
 const ProductCard = ({ product }) => {
 	const { isAuthenticated } = useAuth();
 	const { publishProduct, unpublishProduct } = useAdmin();
+	const { addToCart } = useCart();
 	const navigate = useNavigate();
 
 	const handleTogglePublish = async () => {

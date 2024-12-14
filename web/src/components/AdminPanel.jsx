@@ -2,43 +2,54 @@ import React, { useEffect, useState } from "react";
 import { useAdmin } from "../hooks/useAdmin";
 
 const AdminPanel = () => {
-	const { loading, error, getAdminSettings, updateAdminSettings } = useAdmin();
+	const { getAdminSettings, updateAdminSettings } = useAdmin();
 	const [adminSettings, setAdminSettings] = useState({
 		username: "",
 		password: "",
 		discount_threshold: "",
 		discount_rate: "",
 	});
+	const [formValues, setFormValues] = useState({ ...adminSettings }); // Separate state for form inputs
+	const [fetchLoading, setFetchLoading] = useState(false);
+	const [updateLoading, setUpdateLoading] = useState(false);
 
 	useEffect(() => {
 		const fetchAdminSettings = async () => {
+			setFetchLoading(true);
 			try {
 				const data = await getAdminSettings();
 				setAdminSettings(data.admin);
+				setFormValues(data.admin); // Initialize form values with fetched data
 			} catch (err) {
 				console.error(err);
+			} finally {
+				setFetchLoading(false);
 			}
 		};
 
 		fetchAdminSettings();
-	}, [getAdminSettings]);
+	}, []);
 
 	const handleChange = (e) => {
 		const { name, value } = e.target;
-		setAdminSettings((prevSettings) => ({
-			...prevSettings,
+		setFormValues((prevValues) => ({
+			...prevValues,
 			[name]: value,
 		}));
 	};
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
+		setUpdateLoading(true);
 		try {
-			await updateAdminSettings(adminSettings);
+			await updateAdminSettings(formValues);
+			setAdminSettings(formValues); // Update actual settings only on successful submission
 			alert("Admin settings updated successfully!");
 		} catch (err) {
 			console.error(err);
 			alert("Failed to update admin settings.");
+		} finally {
+			setUpdateLoading(false);
 		}
 	};
 
@@ -47,8 +58,7 @@ const AdminPanel = () => {
 			<div className="section">
 				<div className="title">Admin Panel</div>
 			</div>
-			{loading && <p>Loading...</p>}
-			{error && <p className="has-text-danger">{error}</p>}
+			{fetchLoading && <p>Loading admin settings...</p>}
 			<form onSubmit={handleSubmit}>
 				<div className="field">
 					<label className="label">Username</label>
@@ -57,7 +67,7 @@ const AdminPanel = () => {
 							className="input"
 							type="text"
 							name="username"
-							value={adminSettings.username}
+							value={formValues.username}
 							onChange={handleChange}
 							required
 						/>
@@ -70,7 +80,7 @@ const AdminPanel = () => {
 							className="input"
 							type="password"
 							name="password"
-							value={adminSettings.password}
+							value={formValues.password}
 							onChange={handleChange}
 							required
 						/>
@@ -83,7 +93,7 @@ const AdminPanel = () => {
 							className="input"
 							type="number"
 							name="discount_threshold"
-							value={adminSettings.discount_threshold}
+							value={formValues.discount_threshold}
 							onChange={handleChange}
 							required
 						/>
@@ -97,7 +107,7 @@ const AdminPanel = () => {
 							type="number"
 							step="0.01"
 							name="discount_rate"
-							value={adminSettings.discount_rate}
+							value={formValues.discount_rate}
 							onChange={handleChange}
 							required
 						/>
@@ -105,8 +115,8 @@ const AdminPanel = () => {
 				</div>
 				<div className="field">
 					<div className="control">
-						<button className="button is-primary" type="submit" disabled={loading}>
-							{loading ? "Updating..." : "Update Settings"}
+						<button className="button is-primary" type="submit" disabled={updateLoading}>
+							{updateLoading ? "Updating..." : "Update Settings"}
 						</button>
 					</div>
 				</div>

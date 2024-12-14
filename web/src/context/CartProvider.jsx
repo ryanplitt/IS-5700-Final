@@ -1,12 +1,15 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
-
+import { useAuth } from "./AuthContext";
 export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
 	const [cart, setCart] = useState([]);
 	const [error, setError] = useState(null);
+	const [totalWithDiscount, setTotalWithDiscount] = useState(0); // Store discounted total
+	const { admin } = useAuth(); // Use admin data for discount settings
 
+	// Add item to cart
 	const addToCart = (product) => {
 		setCart((prevCart) => {
 			const existingProduct = prevCart.find((item) => item.id === product.id);
@@ -59,7 +62,19 @@ export const CartProvider = ({ children }) => {
 	const calculateCartTotal = () =>
 		cart.reduce((total, item) => total + calculateItemTotal(item), 0);
 
-	// Checkout Function
+	const calculateDiscount = () => {
+		if (!admin) return 0;
+		const cartTotal = calculateCartTotal();
+		return cartTotal > admin.discount_threshold ? cartTotal * admin.discount_rate : 0;
+	};
+
+	useEffect(() => {
+		const cartTotal = calculateCartTotal();
+		const discount = calculateDiscount();
+		setTotalWithDiscount(cartTotal - discount);
+	}, [cart, admin]);
+
+	// Checkout function
 	const checkout = async () => {
 		try {
 			// Update inventory in the backend
@@ -91,6 +106,8 @@ export const CartProvider = ({ children }) => {
 				removeFromCart,
 				calculateItemTotal,
 				calculateCartTotal,
+				calculateDiscount,
+				totalWithDiscount,
 				checkout,
 				error,
 				clearError,
