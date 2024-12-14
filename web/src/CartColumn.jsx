@@ -1,8 +1,9 @@
 import React from "react";
 import { useCart } from "./hooks/useCart";
+import CartItem from "./components/CartItem";
 
 const CartColumn = () => {
-	const { cart, updateQuantity, removeFromCart } = useCart();
+	const { cart, calculateCartTotal, checkout } = useCart();
 
 	return (
 		<aside className="box">
@@ -12,46 +13,16 @@ const CartColumn = () => {
 			) : (
 				<>
 					{cart.map((item) => (
-						<div key={item.id} className="box">
-							<p>
-								<strong>{item.name}</strong>
-							</p>
-							<p>${item.price.toFixed(2)}</p>
-							<div className="field has-addons">
-								<p className="control">
-									<button
-										className="button is-small"
-										onClick={() => updateQuantity(item.id, Math.max(item.quantity - 1, 1))}
-									>
-										-
-									</button>
-								</p>
-								<p className="control">
-									<input
-										className="input is-small"
-										type="number"
-										value={item.quantity}
-										onChange={(e) =>
-											updateQuantity(item.id, Math.max(1, parseInt(e.target.value) || 1))
-										}
-									/>
-								</p>
-								<p className="control">
-									<button
-										className="button is-small"
-										onClick={() => updateQuantity(item.id, item.quantity + 1)}
-									>
-										+
-									</button>
-								</p>
-							</div>
-							<button className="button is-danger is-small" onClick={() => removeFromCart(item.id)}>
-								Remove
-							</button>
-						</div>
+						<CartItem key={item.id} item={item} />
 					))}
+					<hr />
+					<div className="box">
+						<p className="title is-5">Grand Total: ${calculateCartTotal().toFixed(2)}</p>
+					</div>
 					<div className="buttons">
-						<button className="button is-primary is-fullwidth">Checkout</button>
+						<button className="button is-primary is-fullwidth" onClick={checkout}>
+							Checkout
+						</button>
 					</div>
 				</>
 			)}

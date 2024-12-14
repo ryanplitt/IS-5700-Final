@@ -3,8 +3,12 @@ import ProductCard from "./ProductCard";
 import CartColumn from "./CartColumn";
 import "./utils/stringExtensions";
 import "./styles/main.scss";
+import { useCart } from "./hooks/useCart";
+import Toast from "./components/Toast";
 
 const ProductsPage = ({ groupedProducts, loading, error }) => {
+	const { error: cartError, clearError } = useCart();
+
 	if (loading) {
 		return (
 			<div
@@ -37,6 +41,7 @@ const ProductsPage = ({ groupedProducts, loading, error }) => {
 						</div>
 					</section>
 				))}
+				<Toast message={cartError} clearError={clearError} />
 			</div>
 
 			{/* Cart Column */}

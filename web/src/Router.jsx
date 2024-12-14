@@ -8,6 +8,7 @@ import useProductSearch from "./hooks/useProductSearch";
 import AdminPanel from "./components/AdminPanel";
 import { useAuth } from "./context/AuthContext";
 import EditProductPage from "./components/EditProductPage";
+import Toast from "./components/Toast";
 
 const ProtectedRoute = ({ children }) => {
 	const { isAuthenticated } = useAuth();
