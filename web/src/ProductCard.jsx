@@ -32,11 +32,9 @@ const ProductCard = ({ product, addToCart, loading = false }) => {
 			</div>
 			<div className="card-content">
 				<p className="title is-4">{product.title}</p>
-				<div className="subtitle is-6">
-					<div className="subtitle is-6">
-						${product.price ? parseFloat(product.price).toFixed(2) : "0.00"}
-					</div>
-				</div>
+				<p className="subtitle is-6">
+					${product.price ? parseFloat(product.price).toFixed(2) : "0.00"}
+				</p>
 				{isAuthenticated ? (
 					<button
 						className="button is-warning is-fullwidth"

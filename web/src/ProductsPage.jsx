@@ -1,7 +1,5 @@
 import React from "react";
 import ProductCard from "./ProductCard";
-import "./utils/stringExtensions";
-import "./styles/main.scss";
 
 const ProductsPage = ({ groupedProducts, loading, error }) => {
 	if (loading) {
@@ -23,10 +21,12 @@ const ProductsPage = ({ groupedProducts, loading, error }) => {
 		<>
 			{Object.entries(groupedProducts).map(([type, products]) => (
 				<section key={type} className="section">
-					<div className="title">{type.capitalized()}</div>
-					<div className="grid">
+					<h1 className="title">{type.capitalized()}</h1>
+					<div className="grid has-auto-count">
 						{products.map((product) => (
-							<ProductCard key={product.id} product={product} />
+							<div key={product.id}>
+								<ProductCard product={product} />
+							</div>
 						))}
 					</div>
 				</section>
