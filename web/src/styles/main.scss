@@ -35,6 +35,12 @@ $grey-light: #f7f9fa;
 // Import Google Font
 @import url("https://fonts.googleapis.com/css?family=Nunito:400,700");
 
+@import "bulma/sass/utilities/mixins";
+
+.bulma-unselectable-mixin {
+  @include unselectable; // Use Bulma's unselectable mixin
+}
+
 // Custom styles (optional)
 body {
   background-color: $grey-light;

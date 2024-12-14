@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useMemo } from "react";
 import ProductCard from "./ProductCard";
 import CartColumn from "./CartColumn";
 import "./utils/stringExtensions";
@@ -8,6 +8,29 @@ import Toast from "./components/Toast";
 
 const ProductsPage = ({ groupedProducts, loading, error }) => {
 	const { error: cartError, clearError } = useCart();
+
+	const [selectedTypes, setSelectedTypes] = useState([]);
+
+	// Extract unique product types
+	const productTypes = useMemo(() => Object.keys(groupedProducts), [groupedProducts]);
+
+	// Toggle product type selection
+	const toggleType = (type) => {
+		setSelectedTypes((prev) =>
+			prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]
+		);
+	};
+
+	// Filtered groupedProducts
+	const filteredProducts = useMemo(() => {
+		if (selectedTypes.length === 0) return groupedProducts;
+		return Object.entries(groupedProducts).reduce((acc, [type, products]) => {
+			if (selectedTypes.includes(type)) {
+				acc[type] = products;
+			}
+			return acc;
+		}, {});
+	}, [groupedProducts, selectedTypes]);
 
 	if (loading) {
 		return (
@@ -26,9 +49,23 @@ const ProductsPage = ({ groupedProducts, loading, error }) => {
 
 	return (
 		<div className="columns">
-			{/* Products Column */}
 			<div className="column is-three-quarters">
-				{Object.entries(groupedProducts).map(([type, products]) => (
+				<div className="tags mb-4">
+					{productTypes.map((type) => (
+						<span
+							key={type}
+							className={`tag is-large ${
+								selectedTypes.includes(type) ? "is-info" : "is-light"
+							} bulma-unselectable-mixin`}
+							onClick={() => toggleType(type)}
+							style={{ cursor: "pointer" }}
+						>
+							{type.capitalized()}
+						</span>
+					))}
+				</div>
+
+				{Object.entries(filteredProducts).map(([type, products]) => (
 					<section key={type} className="section">
 						<h1 className="title">{type.capitalized()}</h1>
 						{/* Fixed Grid Modifiers */}
