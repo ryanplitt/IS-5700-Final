@@ -40,3 +40,8 @@ body {
   background-color: $grey-light;
   color: $grey-dark;
 }
+
+.sticky-cart {
+  position: sticky;
+  top: 1rem; /* Adjust as needed for spacing */
+}
