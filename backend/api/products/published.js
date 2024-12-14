@@ -1,6 +1,6 @@
 import { promises as fs } from "fs";
 import path from "path";
-import applyMiddleware from "../../middleware";
+import applyMiddleware from "../middleware";
 
 const handler = async (req, res) => {
 	if (req.method !== "GET") {
