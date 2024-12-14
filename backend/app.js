@@ -12,18 +12,18 @@ app.use(bodyParser.json());
 // CORS
 app.use(
 	cors({
-		origin: "*",
-		methods: ["GET", "PUT", "POST", "OPTIONS"],
-		allowedHeaders: ["Content-Type", "Authorization"],
+		origin: "*", // Allow all origins
+		methods: ["GET", "PUT", "POST", "OPTIONS"], // Allowed methods
+		allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
 	})
 );
 
-app.use((req, res, next) => {
-	res.setHeader("Content-Type", "application/json");
-	if (req.method === "OPTIONS") {
-		return res.status(204).end();
-	}
-	next();
+// Explicitly handle `OPTIONS` preflight requests
+app.options("*", (req, res) => {
+	res.setHeader("Access-Control-Allow-Origin", "*");
+	res.setHeader("Access-Control-Allow-Methods", "GET, PUT, POST, OPTIONS");
+	res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+	res.status(204).end(); // End the response without processing further
 });
 
 app.get("/products/published", async (req, res) => {
