@@ -24,14 +24,12 @@ const Router = () => {
 				path="/"
 				element={
 					<CartProvider>
-						{/* Search Bar */}
 						<div className="section">
 							<div className="container">
 								<DebouncedSearch onSearch={searchProducts} placeholder="Search products..." />
 							</div>
 						</div>
 
-						{/* Products Page */}
 						<div className="container">
 							<ProductsPage groupedProducts={groupedProducts} loading={loading} error={error} />
 						</div>

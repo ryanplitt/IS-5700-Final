@@ -5,6 +5,8 @@ import Modal from "../components/Modal";
 
 export const CartContext = createContext();
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
 export const CartProvider = ({ children }) => {
 	const [cart, setCart] = useState([]);
 	const [error, setError] = useState(null);
@@ -25,7 +27,6 @@ export const CartProvider = ({ children }) => {
 		setModal({ isActive: false, title: "", content: "" });
 	};
 
-	// Add item to cart
 	const addToCart = (product) => {
 		setCart((prevCart) => {
 			const existingProduct = prevCart.find((item) => item.id === product.id);
@@ -92,10 +93,9 @@ export const CartProvider = ({ children }) => {
 
 	const checkout = async () => {
 		try {
-			// Update inventory in the backend
 			await Promise.all(
 				cart.map((item) =>
-					axios.put(`http://localhost:3000/products/${item.id}`, {
+					axios.put(`${BACKEND_URL}/products/${item.id}`, {
 						product: {
 							...item,
 							inventory: item.inventory - item.quantity,
@@ -103,7 +103,6 @@ export const CartProvider = ({ children }) => {
 					})
 				)
 			);
-			// Clear the cart after successful checkout
 			setCart([]);
 			showModal(
 				"Purchase Successful",

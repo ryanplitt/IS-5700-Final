@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 const Toast = ({ message, clearError }) => {
 	useEffect(() => {
 		if (message) {
-			const timer = setTimeout(() => clearError(), 3000); // Auto-dismiss after 3 seconds
+			const timer = setTimeout(() => clearError(), 3000);
 			return () => clearTimeout(timer);
 		}
 	}, [message, clearError]);

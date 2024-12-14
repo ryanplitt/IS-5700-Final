@@ -10,7 +10,7 @@ const AdminPanel = () => {
 		discount_threshold: "",
 		discount_rate: "",
 	});
-	const [formValues, setFormValues] = useState({ ...adminSettings }); // Separate state for form inputs
+	const [formValues, setFormValues] = useState({ ...adminSettings });
 	const [fetchLoading, setFetchLoading] = useState(false);
 	const [updateLoading, setUpdateLoading] = useState(false);
 
@@ -34,7 +34,7 @@ const AdminPanel = () => {
 			try {
 				const data = await getAdminSettings();
 				setAdminSettings(data.admin);
-				setFormValues(data.admin); // Initialize form values with fetched data
+				setFormValues(data.admin);
 			} catch (err) {
 				console.error(err);
 			} finally {

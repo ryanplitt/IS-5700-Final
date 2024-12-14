@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
 const useProductSearch = (initialQuery = "") => {
 	const { isAuthenticated } = useAuth();
 	const [groupedProducts, setGroupedProducts] = useState({});
@@ -15,8 +17,8 @@ const useProductSearch = (initialQuery = "") => {
 		setError(null);
 
 		const url = isAuthenticated
-			? "http://localhost:3000/products/all"
-			: "http://localhost:3000/products/published";
+			? `${BACKEND_URL}/products/all`
+			: `${BACKEND_URL}/products/published`;
 
 		try {
 			const response = await axios.get(url, {
@@ -27,13 +29,11 @@ const useProductSearch = (initialQuery = "") => {
 			});
 			const grouped = response.data.products;
 
-			// Flatten and filter products
 			const allProducts = flattenGroupedProducts(grouped);
 			const filteredProducts = isAuthenticated
 				? allProducts
 				: allProducts.filter((product) => product.inventory > 0);
 
-			// Regroup the filtered products by type
 			const regroupedProducts = filteredProducts.reduce((acc, product) => {
 				if (!acc[product.product_type]) acc[product.product_type] = [];
 				acc[product.product_type].push(product);
@@ -49,7 +49,6 @@ const useProductSearch = (initialQuery = "") => {
 		}
 	};
 
-	// Fetch products on initial load
 	useEffect(() => {
 		searchProducts(initialQuery);
 	}, [initialQuery, isAuthenticated]);

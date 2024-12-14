@@ -65,7 +65,6 @@ const ProductsPage = ({ groupedProducts, loading, error }) => {
 				{Object.entries(filteredProducts).map(([type, products]) => (
 					<section key={type} className="section">
 						<h1 className="title">{type.capitalized()}</h1>
-						{/* Fixed Grid Modifiers */}
 						<div className="columns is-multiline">
 							{products.map((product) => (
 								<div
@@ -81,7 +80,6 @@ const ProductsPage = ({ groupedProducts, loading, error }) => {
 				<Toast message={cartError} clearError={clearError} />
 			</div>
 
-			{/* Cart Column */}
 			<div className="column is-one-quarter">
 				<div className="sticky-cart">
 					<CartColumn />
