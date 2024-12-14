@@ -1,4 +1,6 @@
 const fs = require("node:fs/promises");
+import path from "path";
+const filePath = path.resolve("./data/products.json");
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
