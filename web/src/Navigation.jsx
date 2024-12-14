@@ -1,20 +1,25 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./styles/main.scss";
 import { useAuth } from "./context/AuthContext";
 
 const Navigation = ({ children }) => {
 	const auth = useAuth();
+	const navigate = useNavigate();
 	const isAuthenticated = auth ? auth.isAuthenticated : false;
 
 	const handleLogout = () => {
 		auth.logout();
-		window.location.href = "/login";
+		navigate("/");
 	};
 
 	return (
 		<>
-			<nav className="navbar is-primary" role="navigation" aria-label="main navigation">
+			<nav
+				className={`navbar ${isAuthenticated ? "is-warning" : "is-primary"}`}
+				role="navigation"
+				aria-label="main navigation"
+			>
 				<div className="navbar-menu">
 					<div className="navbar-start">
 						<Link to="/" className="navbar-item">
@@ -30,7 +35,11 @@ const Navigation = ({ children }) => {
 						{isAuthenticated ? (
 							<>
 								<span className="navbar-item">{auth.admin.username}</span>
-								<a onClick={handleLogout} className="navbar-item" style={{ cursor: "pointer" }}>
+								<a
+									onClick={handleLogout}
+									className="navbar-item"
+									style={{ cursor: "pointer", color: "#3273dc" }}
+								>
 									Logout
 								</a>
 							</>

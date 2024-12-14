@@ -1,10 +1,12 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
+import { useCart } from "./hooks/useCart";
 
-const ProductCard = ({ product, addToCart, loading = false }) => {
+const ProductCard = ({ product, loading = false }) => {
 	const navigate = useNavigate();
 	const { isAuthenticated } = useAuth();
+	const { cart, addToCart } = useCart();
 
 	if (loading) {
 		return (
