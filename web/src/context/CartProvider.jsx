@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState } from "react";
+import axios from "axios";
 
 export const CartContext = createContext();
 
@@ -10,7 +11,6 @@ export const CartProvider = ({ children }) => {
 		setCart((prevCart) => {
 			const existingProduct = prevCart.find((item) => item.id === product.id);
 
-			// Check if adding more exceeds the stock
 			if (existingProduct && existingProduct.quantity >= product.inventory) {
 				setError(`Only ${product.inventory} ${product.title} available in stock.`);
 				return prevCart;
@@ -43,10 +43,7 @@ export const CartProvider = ({ children }) => {
 						setError(`Only ${item.inventory} ${item.title} available in stock.`);
 						return item;
 					}
-					return {
-						...item,
-						quantity: Math.min(quantity, item.inventory), // Ensure quantity doesn't exceed inventory
-					};
+					return { ...item, quantity };
 				}
 				return item;
 			})
@@ -62,6 +59,29 @@ export const CartProvider = ({ children }) => {
 	const calculateCartTotal = () =>
 		cart.reduce((total, item) => total + calculateItemTotal(item), 0);
 
+	// Checkout Function
+	const checkout = async () => {
+		try {
+			// Update inventory in the backend
+			await Promise.all(
+				cart.map((item) =>
+					axios.put(`http://localhost:3000/products/${item.id}`, {
+						product: {
+							...item,
+							inventory: item.inventory - item.quantity,
+						},
+					})
+				)
+			);
+			// Clear the cart after successful checkout
+			setCart([]);
+			alert("Purchase successful! Thank you for your order.");
+		} catch (err) {
+			console.error(err);
+			setError("Checkout failed. Please try again.");
+		}
+	};
+
 	return (
 		<CartContext.Provider
 			value={{
@@ -71,6 +91,7 @@ export const CartProvider = ({ children }) => {
 				removeFromCart,
 				calculateItemTotal,
 				calculateCartTotal,
+				checkout,
 				error,
 				clearError,
 			}}

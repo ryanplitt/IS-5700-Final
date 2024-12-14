@@ -4,6 +4,7 @@ import "../styles/main.scss";
 
 const CartItem = ({ item }) => {
 	const { updateQuantity, removeFromCart, calculateItemTotal } = useCart();
+	const price = Number(item.price).toFixed(2);
 
 	return (
 		<div className="box">
@@ -18,7 +19,7 @@ const CartItem = ({ item }) => {
 				{/* Item Details */}
 				<div className="media-content">
 					<p className="title is-6">{item.title}</p>
-					<p className="subtitle is-7">${item.price.toFixed(2)} each</p>
+					<p className="subtitle is-7">${price} each</p>
 
 					{/* Quantity Stepper */}
 					<div className="field has-addons">
@@ -52,15 +53,9 @@ const CartItem = ({ item }) => {
 
 					{/* Total and Remove Button */}
 					<div className="mt-3">
-						<p className="has-text-weight-bold">${calculateItemTotal(item).toFixed(2)}</p>
-						<button
-							className="button is-danger is-small"
-							onClick={() => removeFromCart(item.id)}
-							title="Remove Item"
-						>
-							<span className="icon">
-								<i className="fas fa-trash"></i>
-							</span>
+						<p className="subtitle is-7">Total: ${calculateItemTotal(item).toFixed(2)}</p>
+						<button className="button is-danger is-small" onClick={() => removeFromCart(item.id)}>
+							Remove
 						</button>
 					</div>
 				</div>

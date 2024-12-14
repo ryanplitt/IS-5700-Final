@@ -32,9 +32,12 @@ const ProductsPage = ({ groupedProducts, loading, error }) => {
 					<section key={type} className="section">
 						<h1 className="title">{type.capitalized()}</h1>
 						{/* Fixed Grid Modifiers */}
-						<div className="grid has-2-cols-mobile has-2-cols-tablet has-4-cols-desktop has-4-cols-widescreen has-4-cols-fullhd">
+						<div className="columns is-multiline">
 							{products.map((product) => (
-								<div key={product.id}>
+								<div
+									key={product.id}
+									className="column is-half-mobile is-half-tablet is-one-quarter-desktop"
+								>
 									<ProductCard product={product} />
 								</div>
 							))}

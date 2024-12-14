@@ -1,14 +1,19 @@
 import React from "react";
 import { useCart } from "./hooks/useCart";
 import CartItem from "./components/CartItem";
+import { useAuth } from "./context/AuthContext";
 
 const CartColumn = () => {
-	const { cart, calculateCartTotal, checkout } = useCart();
+	const { cart, calculateCartTotal, checkout, error, clearError } = useCart();
+
+	const { isAuthenticated } = useAuth();
 
 	return (
 		<aside className="box">
 			<h2 className="title is-4">Your Cart</h2>
-			{cart.length === 0 ? (
+			{isAuthenticated ? (
+				<p>Logout to add items to the cart.</p>
+			) : cart.length === 0 ? (
 				<p>Your cart is empty.</p>
 			) : (
 				<>
