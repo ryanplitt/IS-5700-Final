@@ -17,8 +17,8 @@ const useProductSearch = (initialQuery = "") => {
 		setError(null);
 
 		const url = isAuthenticated
-			? `${BACKEND_URL}/products/all`
-			: `${BACKEND_URL}/products/published`;
+			? `${BACKEND_URL}/api/products/all`
+			: `${BACKEND_URL}/api/products/published`;
 
 		try {
 			const response = await axios.get(url, {

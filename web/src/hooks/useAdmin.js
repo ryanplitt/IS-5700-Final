@@ -15,7 +15,7 @@ export const useAdmin = () => {
 		setLoading(true);
 		setError(null);
 		try {
-			const response = await api.get("/products/all", {
+			const response = await api.get("/api/products/all", {
 				params: { groupBy, search },
 			});
 			return response.data;
@@ -31,7 +31,7 @@ export const useAdmin = () => {
 		setLoading(true);
 		setError(null);
 		try {
-			const response = await api.put(`/products/${productId}`, { product });
+			const response = await api.put(`/api/products/${productId}`, { product });
 			return response.data;
 		} catch (err) {
 			setError(err.message);
@@ -45,7 +45,7 @@ export const useAdmin = () => {
 		setLoading(true);
 		setError(null);
 		try {
-			const response = await api.put(`/products/${product.id}`, {
+			const response = await api.put(`/api/products/${product.id}`, {
 				product: { ...product, published: true },
 			});
 			return response.data;
@@ -61,7 +61,7 @@ export const useAdmin = () => {
 		setLoading(true);
 		setError(null);
 		try {
-			const response = await api.put(`/products/${product.id}`, {
+			const response = await api.put(`/api/products/${product.id}`, {
 				product: { ...product, published: false },
 			});
 			return response.data;
@@ -77,7 +77,7 @@ export const useAdmin = () => {
 		setLoading(true);
 		setError(null);
 		try {
-			const response = await api.get("/admin");
+			const response = await api.get("/api/admin");
 			return response.data;
 		} catch (err) {
 			setError(err.message);
@@ -91,7 +91,7 @@ export const useAdmin = () => {
 		setLoading(true);
 		setError(null);
 		try {
-			const response = await api.put("/admin", { admin });
+			const response = await api.put("/api/admin", { admin });
 			return response.data;
 		} catch (err) {
 			setError(err.message);
