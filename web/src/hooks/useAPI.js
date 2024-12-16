@@ -13,7 +13,7 @@ const api = axios.create({
 export const useAPI = () => {
 	const fetchPublishedProducts = useCallback(async (query = "") => {
 		try {
-			const response = await api.get("/api/products/published", {
+			const response = await api.get("/products/published", {
 				params: { search: query },
 			});
 			return response.data.products;
@@ -25,7 +25,7 @@ export const useAPI = () => {
 
 	const fetchAllProducts = useCallback(async () => {
 		try {
-			const response = await api.get("/api/products/all");
+			const response = await api.get("/products/all");
 			return response.data.products;
 		} catch (error) {
 			console.error("Error fetching all products:", error);
@@ -35,7 +35,7 @@ export const useAPI = () => {
 
 	const updateProduct = useCallback(async (productId, productData) => {
 		try {
-			const response = await api.put(`/api/products/${productId}`, { product: productData });
+			const response = await api.put(`/products/${productId}`, { product: productData });
 			return response.data.message;
 		} catch (error) {
 			console.error("Error updating product:", error);

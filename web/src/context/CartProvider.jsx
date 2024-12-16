@@ -95,7 +95,7 @@ export const CartProvider = ({ children }) => {
 		try {
 			await Promise.all(
 				cart.map((item) =>
-					axios.put(`${BACKEND_URL}/api/products/${item.id}`, {
+					axios.put(`${BACKEND_URL}/products/${item.id}`, {
 						product: {
 							...item,
 							inventory: item.inventory - item.quantity,
