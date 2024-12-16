@@ -1,9 +1,9 @@
-const fs = require("node:fs/promises");
+import fs from "fs/promises";
 import path from "path";
 const filePath = path.resolve("./data/products.json");
-const express = require("express");
-const bodyParser = require("body-parser");
-const cors = require("cors");
+import express from "express";
+import bodyParser from "body-parser";
+import cors from "cors";
 
 const app = express();
 
@@ -135,4 +135,4 @@ function mergeObjects(obj1, obj2) {
 	};
 }
 
-module.exports = app;
+export default app;
