@@ -4,7 +4,7 @@
 #
 
 app = 'is-5700-final'
-primary_region = 'fra'
+primary_region = 'den'
 
 [build]
 
