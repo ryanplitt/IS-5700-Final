@@ -11,7 +11,9 @@ export const CartProvider = ({ children }) => {
 	const [cart, setCart] = useState([]);
 	const [error, setError] = useState(null);
 	const [totalWithDiscount, setTotalWithDiscount] = useState(0);
-	const { admin } = useAuth();
+	const { fetchAdminData, admin } = useAuth();
+	if (!admin) fetchAdminData();
+	const discountThreshold = admin ? admin.discount_threshold : 0;
 
 	const [modal, setModal] = useState({
 		isActive: false,
@@ -90,8 +92,6 @@ export const CartProvider = ({ children }) => {
 		const discount = calculateDiscount();
 		setTotalWithDiscount(cartTotal - discount);
 	}, [cart, admin]);
-
-	const discountThreshold = admin ? admin.discount_threshold : 0;
 
 	const checkout = async () => {
 		try {

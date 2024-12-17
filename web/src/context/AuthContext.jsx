@@ -20,17 +20,22 @@ export const AuthContextProvider = ({ children }) => {
 	const [error, setError] = useState(null);
 	const [admin, setAdmin] = useState(null);
 
+	const fetchAdminData = async () => {
+		const response = await api.get("/admin");
+		console.log(response.data);
+		const { admin } = response.data;
+		setAdmin(response.data.admin);
+		return admin;
+	};
+
 	const login = async (email, password) => {
 		setLoading(true);
 		setError(null);
 		setAdmin(null);
 		try {
-			const response = await api.get("/admin");
-			console.log(response.data);
-			const { admin } = response.data;
+			const admin = await fetchAdminData();
 			if (admin.username === email && admin.password === password) {
 				setIsAuthenticated(true);
-				setAdmin(response.data.admin);
 			} else {
 				setError("Invalid credentials");
 			}
@@ -51,7 +56,9 @@ export const AuthContextProvider = ({ children }) => {
 	};
 
 	return (
-		<AuthContext.Provider value={{ isAuthenticated, login, logout, loading, error, admin }}>
+		<AuthContext.Provider
+			value={{ isAuthenticated, login, logout, loading, error, admin, fetchAdminData }}
+		>
 			{children}
 		</AuthContext.Provider>
 	);
