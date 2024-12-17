@@ -91,6 +91,8 @@ export const CartProvider = ({ children }) => {
 		setTotalWithDiscount(cartTotal - discount);
 	}, [cart, admin]);
 
+	const discountThreshold = admin ? admin.discount_threshold : 0;
+
 	const checkout = async () => {
 		try {
 			await Promise.all(
@@ -128,6 +130,7 @@ export const CartProvider = ({ children }) => {
 				checkout,
 				error,
 				clearError,
+				discountThreshold,
 			}}
 		>
 			{children}

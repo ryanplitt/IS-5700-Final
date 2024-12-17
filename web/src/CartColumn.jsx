@@ -4,8 +4,15 @@ import CartItem from "./components/CartItem";
 import { useAuth } from "./context/AuthContext";
 
 const CartColumn = () => {
-	const { cart, totalWithDiscount, checkout, calculateCartTotal, calculateDiscount } = useCart();
-	const { admin, isAuthenticated } = useAuth();
+	const {
+		cart,
+		totalWithDiscount,
+		checkout,
+		calculateCartTotal,
+		calculateDiscount,
+		discountThreshold,
+	} = useCart();
+	const { isAuthenticated } = useAuth();
 
 	const cartTotal = calculateCartTotal();
 	const discount = calculateDiscount();
@@ -26,9 +33,9 @@ const CartColumn = () => {
 					<div className="box has-background-light">
 						<div className="is-flex is-flex-direction-column is-align-items-flex-start is-justify-content-space-between">
 							<p className="title is-5 mb-2">Subtotal: ${cartTotal.toFixed(2)}</p>
-							{cartTotal > admin.discount_threshold && (
+							{cartTotal > discountThreshold && (
 								<p className="has-text-info mb-2">
-									Discount (${admin.discount_rate * 100}%): -${discount.toFixed(2)}
+									Discount (${discountThreshold * 100}%): -${discount.toFixed(2)}
 								</p>
 							)}
 							<p className="title is-4 mt-2">Total: ${totalWithDiscount.toFixed(2)}</p>
